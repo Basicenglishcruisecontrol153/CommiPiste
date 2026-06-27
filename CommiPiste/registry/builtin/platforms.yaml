@@ -1,0 +1,2295 @@
+# CommiPiste built-in platform definitions (single source of truth).
+#
+# Structure:
+#   defaults:   values merged into EVERY platform (a platform key overrides them).
+#   platforms:  <name> -> overrides. Only non-default fields are listed; everything else comes from
+#               `defaults` above or the Project model defaults (kind: core, empty banners, etc.).
+#   extends:    optional — a platform may `extends: <other>` to inherit another entry`s fields.
+#
+# Add a platform: append an entry under `platforms:` with at least `repo_url` + `public_paths`
+# (git-blob) OR a `version_probe` (active-probe). Then `CommiPiste index <name>` (git-blob only).
+
+defaults:
+  source: git
+  commit_url_tpl: '{repo_url}/tree/{sha}'
+platforms:
+  acf:
+    repo_url: https://github.com/AdvancedCustomFields/acf
+    served_prefix: wp-content/plugins/advanced-custom-fields
+    public_paths:
+    - assets
+    kind: plugin
+  akismet:
+    repo_url: https://plugins.svn.wordpress.org/akismet
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/akismet
+    public_paths:
+    - _inc
+    - views
+    kind: plugin
+    cpe: cpe:2.3:a:automattic:akismet
+  b2evolution:
+    repo_url: https://github.com/b2evolution/b2evolution
+    public_paths:
+    - rsc
+    banners:
+      body_regex:
+      - b2evolution
+  bareos:
+    repo_url: https://github.com/bareos/bareos
+    repo_subdir: webui/public
+    public_paths:
+    - css
+    - js
+    - themes
+    banners:
+      body_regex:
+      - Bareos
+      - bareos-webui
+    probe_files:
+    - js/custom-functions.js
+  bbpress:
+    repo_url: https://github.com/bbpress/bbPress
+    served_prefix: wp-content/plugins/bbpress
+    public_paths:
+    - templates
+    probe_files:
+    - templates/default/css/bbpress.css
+    kind: plugin
+  better-wp-security:
+    repo_url: https://plugins.svn.wordpress.org/better-wp-security
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/better-wp-security
+    public_paths:
+    - dist
+    kind: plugin
+  bludit:
+    repo_url: https://github.com/bludit/bludit
+    public_paths:
+    - bl-kernel
+    - bl-themes
+    banners:
+      body_regex:
+      - Bludit
+      - bludit
+    probe_files:
+    - bl-kernel/css/bludit.css
+  bookstack:
+    repo_url: https://github.com/BookStackApp/BookStack
+    repo_subdir: public
+    public_paths:
+    - dist
+    banners:
+      body_regex:
+      - dist/styles\.css\?version=v
+    cpe: cpe:2.3:a:bookstackapp:bookstack
+  buddypress:
+    repo_url: https://github.com/buddypress/buddypress
+    served_prefix: wp-content/plugins/buddypress
+    public_paths:
+    - bp-templates
+    - bp-core
+    probe_files:
+    - bp-templates/bp-legacy/css/buddypress.css
+    kind: plugin
+  bugzilla:
+    repo_url: https://github.com/bugzilla/bugzilla
+    public_paths:
+    - skins
+    - js
+    - images
+    banners:
+      body_regex:
+      - Bugzilla
+  cacti:
+    repo_url: https://github.com/Cacti/cacti
+    public_paths:
+    - include/themes
+    - images
+    - scripts
+    banners:
+      body_regex:
+      - cacti_version
+      - The Cacti Group
+    probe_files:
+    - include/themes/modern/main.css
+    - include/themes/sunrise/main.css
+    cpe: cpe:2.3:a:cacti:cacti
+  calibre-web:
+    repo_url: https://github.com/janeczku/calibre-web
+    repo_subdir: cps
+    public_paths:
+    - static
+    banners:
+      body_regex:
+      - Calibre-Web
+    cpe: cpe:2.3:a:calibre-web_project:calibre-web
+  chamilo:
+    repo_url: https://github.com/chamilo/chamilo-lms
+    public_paths:
+    - public
+    - web
+    - main
+    banners:
+      body_regex:
+      - Chamilo
+      - chamilo
+    probe_files:
+    - web/assets/chamilo.css
+  changedetection:
+    repo_url: https://github.com/dgtlmoon/changedetection.io
+    repo_subdir: changedetectionio
+    public_paths:
+    - static
+    banners:
+      body_regex:
+      - changedetection\.io
+    cpe: cpe:2.3:a:changedetection:changedetection.io
+  classic-editor:
+    repo_url: https://plugins.svn.wordpress.org/classic-editor
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/classic-editor
+    public_paths:
+    - js
+    - scripts
+    kind: plugin
+  cobalt:
+    repo_url: https://github.com/imputnet/cobalt
+    banners:
+      paths:
+      - path: /
+        match: '"cobalt":\{"version"'
+    version_probe:
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"commit":"([0-9a-f]{40})"'
+  complianz-gdpr:
+    repo_url: https://plugins.svn.wordpress.org/complianz-gdpr
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/complianz-gdpr
+    public_paths:
+    - assets
+    kind: plugin
+  concrete:
+    repo_url: https://github.com/concretecms/concretecms
+    public_paths:
+    - concrete/css
+    - concrete/js
+    - concrete/images
+    banners:
+      body_regex:
+      - content="concrete5
+      - Concrete CMS
+      - /concrete/
+    probe_files:
+    - concrete/js/app.js
+    - concrete/css/app.css
+    cpe: cpe:2.3:a:concretecms:concrete_cms
+  contact-form-7:
+    repo_url: https://plugins.svn.wordpress.org/contact-form-7
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/contact-form-7
+    public_paths:
+    - assets
+    - includes
+    - modules
+    kind: plugin
+    cpe: cpe:2.3:a:rocklobster:contact_form_7
+  coppermine:
+    repo_url: https://github.com/coppermine-gallery/cpg1.6.x
+    public_paths:
+    - themes
+    - css
+    - js
+    - images
+    banners:
+      body_regex:
+      - Coppermine
+  discourse:
+    repo_url: https://github.com/discourse/discourse
+    banners:
+      body_regex:
+      - name="generator" content="Discourse
+    version_probe:
+      regex: content="Discourse ([0-9][^" ]*)
+      commit_regex: version ([0-9a-f]{40})
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:discourse:discourse
+  dokuwiki:
+    repo_url: https://github.com/dokuwiki/dokuwiki
+    public_paths:
+    - lib
+    banners:
+      body_regex:
+      - content="DokuWiki
+      - dokuwiki__
+      - /lib/exe/
+    probe_files:
+    - lib/scripts/script.js
+    - lib/styles/screen.css
+    dependents:
+      pattern: lib/plugins/*
+    cpe: cpe:2.3:a:dokuwiki:dokuwiki
+  dolibarr:
+    repo_url: https://github.com/Dolibarr/dolibarr
+    repo_subdir: htdocs
+    public_paths:
+    - includes
+    - theme
+    banners:
+      body_regex:
+      - Dolibarr
+      - /theme/eldy/
+    probe_files:
+    - theme/eldy/graph-jquery.js
+    cpe: cpe:2.3:a:dolibarr:dolibarr
+  dotclear:
+    repo_url: https://github.com/dotclear/dotclear
+    public_paths:
+    - admin
+    - themes
+    banners:
+      body_regex:
+      - Dotclear
+      - dotclear
+  dozzle:
+    repo_url: https://github.com/amir20/dozzle
+    banners:
+      paths:
+      - path: /api/version
+        match: '<pre>v'
+    version_probe:
+      paths:
+      - /api/version
+      regex: '<pre>v?([0-9][^<]*)</pre>'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:dozzle:dozzle
+  drupal:
+    repo_url: https://github.com/drupal/drupal
+    public_paths:
+    - core/misc
+    - core/themes
+    - core/modules
+    banners:
+      headers:
+        X-Generator: Drupal
+      body_regex:
+      - name="Generator" content="Drupal
+      - /core/misc/drupal
+    probe_files:
+    - core/misc/drupal.js
+    - core/misc/drupal.init.js
+    dependents:
+      pattern: modules/*
+    cpe: cpe:2.3:a:drupal:drupal
+  duplicate-post:
+    repo_url: https://plugins.svn.wordpress.org/duplicate-post
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/duplicate-post
+    public_paths:
+    - css
+    - js
+    kind: plugin
+  e107:
+    repo_url: https://github.com/e107inc/e107
+    public_paths:
+    - e107_web
+    - e107_themes
+    banners:
+      body_regex:
+      - e107
+      - content="e107
+    probe_files:
+    - e107_web/js/core/all.jquery.js
+  elementor:
+    repo_url: https://github.com/elementor/elementor
+    served_prefix: wp-content/plugins/elementor
+    public_paths:
+    - assets
+    probe_files:
+    - assets/css/frontend.min.css
+    kind: plugin
+    cpe: cpe:2.3:a:elementor:website_builder
+  espocrm:
+    repo_url: https://github.com/espocrm/espocrm
+    public_paths:
+    - client
+    banners:
+      body_regex:
+      - EspoCRM
+      - espo-
+  flarum:
+    repo_url: https://github.com/flarum/framework
+    banners:
+      body_regex:
+      - Powered by Flarum
+      - Flarum
+    version_probe:
+      regex: Flarum[^<]{0,40}?(\d+\.\d+\.\d+)
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:flarum:flarum
+  fluxbb:
+    repo_url: https://github.com/fluxbb/fluxbb
+    public_paths:
+    - style
+    - img
+    banners:
+      body_regex:
+      - FluxBB
+    cpe: cpe:2.3:a:fluxbb:fluxbb
+  freescout:
+    repo_url: https://github.com/freescout-helpdesk/freescout
+    repo_subdir: public
+    public_paths:
+    - js
+    - css
+    - img
+    banners:
+      body_regex:
+      - FreeScout
+  frigate:
+    repo_url: https://github.com/blakeblackshear/frigate
+    banners:
+      paths:
+      - path: /api/config
+        match: '"safe_mode"'
+    version_probe:
+      paths:
+      - /api/version
+      regex: '^([0-9][^-\s]*)'
+      commit_regex: '-([0-9a-f]{7,})'
+    cpe: cpe:2.3:a:frigate:frigate
+  froxlor:
+    repo_url: https://github.com/froxlor/froxlor
+    public_paths:
+    - public
+    - templates
+    banners:
+      body_regex:
+      - Froxlor
+      - froxlor
+    probe_files:
+    - templates/Froxlor/assets/css/froxlor.css
+  geeklog:
+    repo_url: https://github.com/Geeklog-Core/geeklog
+    repo_subdir: public_html
+    public_paths:
+    - layout
+    - javascript
+    - images
+    banners:
+      body_regex:
+      - Geeklog
+      - geeklog
+  ghost:
+    repo_url: https://github.com/TryGhost/Ghost
+    banners:
+      body_regex:
+      - name="generator" content="Ghost
+    version_probe:
+      regex: content="Ghost ([0-9][^" ]*)
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:ghost:ghost
+  gibbon:
+    repo_url: https://github.com/GibbonEdu/core
+    public_paths:
+    - themes
+    - lib
+    banners:
+      body_regex:
+      - Powered by[^<]*Gibbon
+      - Gibbon Foundation
+      - /modules/System Admin/
+  gitea:
+    repo_url: https://github.com/go-gitea/gitea
+    banners:
+      body_regex:
+      - Powered by Gitea
+      - gitea-version
+    version_probe:
+      paths:
+      - /api/v1/version
+      regex: '"version"\s*:\s*"([^"]+)"'
+    cpe: cpe:2.3:a:gitea:gitea
+  glances:
+    repo_url: https://github.com/nicolargo/glances
+    banners:
+      paths:
+      - path: /api/4/status
+        match: '{"version"'
+    version_probe:
+      paths:
+      - /api/4/status
+      regex: '"version":\s*"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:nicolargo:glances
+  glpi:
+    repo_url: https://github.com/glpi-project/glpi
+    public_paths:
+    - public
+    - css
+    - js
+    - lib
+    banners:
+      body_regex:
+      - glpi_
+      - content="GLPI
+      - /glpi/
+    probe_files:
+    - css/styles.css
+    - js/common.js
+    dependents:
+      pattern: plugins/*
+    cpe: cpe:2.3:a:glpi-project:glpi
+  google-site-kit:
+    repo_url: https://plugins.svn.wordpress.org/google-site-kit
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/google-site-kit
+    public_paths:
+    - dist
+    kind: plugin
+  gotify:
+    repo_url: https://github.com/gotify/server
+    banners:
+      paths:
+      - path: /version
+        match: '"buildDate"'
+    version_probe:
+      paths:
+      - /version
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"commit":"([0-9a-f]{40})"'
+    cpe: cpe:2.3:a:gotify:server
+  grafana:
+    repo_url: https://github.com/grafana/grafana
+    banners:
+      body_regex:
+      - grafanaBootData
+      - <title>Grafana</title>
+    version_probe:
+      paths:
+      - /api/health
+      regex: '"version"\s*:\s*"([^"]+)"'
+      commit_regex: '"commit"\s*:\s*"([0-9a-f]{7,40})"'
+    cpe: cpe:2.3:a:grafana:grafana
+  grav:
+    repo_url: https://github.com/getgrav/grav
+    public_paths:
+    - system/assets
+    - user/themes
+    - images
+    banners:
+      body_regex:
+      - content="Grav
+      - /user/themes/
+    probe_files:
+    - system/assets/jquery/jquery-3.x.min.js
+    - user/themes/quark/css/template.css
+    cpe: cpe:2.3:a:getgrav:grav
+  grocy:
+    repo_url: https://github.com/grocy/grocy
+    repo_subdir: public
+    public_paths:
+    - css
+    - js
+    banners:
+      body_regex:
+      - css/grocy\.css
+    cpe: cpe:2.3:a:grocy:grocy
+  icingaweb2:
+    repo_url: https://github.com/Icinga/icingaweb2
+    repo_subdir: public
+    public_paths:
+    - css
+    - js
+    - img
+    banners:
+      body_regex:
+      - Icinga
+      - icinga
+    probe_files:
+    - js/icinga.min.js
+    - css/icinga/main.less
+    dependents:
+      pattern: modules/*
+    cpe: cpe:2.3:a:icinga:icinga_web_2
+  ilias:
+    repo_url: https://github.com/ILIAS-eLearning/ILIAS
+    public_paths:
+    - templates
+    - node_modules
+    banners:
+      body_regex:
+      - ILIAS
+      - il_ias
+      - ilias
+    probe_files:
+    - templates/default/delos.css
+  immich:
+    repo_url: https://github.com/immich-app/immich
+    banners:
+      paths:
+      - path: /api/server/version
+        match: '"major"'
+    version_probe:
+      paths:
+      - /api/server/version
+      regex: '"major":(\d+),"minor":(\d+),"patch":(\d+)'
+      version_template: '{0}.{1}.{2}'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:immich:immich
+  insert-headers-and-footers:
+    repo_url: https://plugins.svn.wordpress.org/insert-headers-and-footers
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/insert-headers-and-footers
+    public_paths:
+    - build
+    kind: plugin
+  instagram-feed:
+    repo_url: https://plugins.svn.wordpress.org/instagram-feed
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/instagram-feed
+    public_paths:
+    - assets
+    - css
+    - js
+    - img
+    kind: plugin
+  jellyfin:
+    repo_url: https://github.com/jellyfin/jellyfin
+    banners:
+      paths:
+      - path: /System/Info/Public
+        match: '"ProductName":"Jellyfin'
+    version_probe:
+      paths:
+      - /System/Info/Public
+      regex: '"Version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:jellyfin:jellyfin
+  jellyseerr:
+    repo_url: https://github.com/fallenbagel/jellyseerr
+    banners:
+      paths:
+      - path: /api/v1/status
+        match: '"commitsBehind"'
+    version_probe:
+      paths:
+      - /api/v1/status
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"commitTag":"([0-9a-f]{7,40})"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:jellyseerr:jellyseerr
+  jenkins:
+    repo_url: https://github.com/jenkinsci/jenkins
+    banners:
+      headers:
+        X-Jenkins: \d+\.\d+
+    version_probe:
+      paths:
+      - ''
+      - /login
+      header: X-Jenkins
+      regex: ^([0-9.]+)
+    cpe: cpe:2.3:a:jenkins:jenkins
+  joomla:
+    repo_url: https://github.com/joomla/joomla-cms
+    public_paths:
+    - media
+    - templates
+    banners:
+      body_regex:
+      - name="generator" content="Joomla
+      - /media/(system|jui|vendor)/
+    probe_files:
+    - media/system/js/core.min.js
+    - templates/cassiopeia/css/template.min.css
+    dependents:
+      pattern: plugins/*
+    cpe: cpe:2.3:a:joomla:joomla\!
+  kanboard:
+    repo_url: https://github.com/kanboard/kanboard
+    public_paths:
+    - assets
+    banners:
+      body_regex:
+      - Kanboard
+      - kanboard
+    probe_files:
+    - assets/css/app.min.css
+    - assets/js/app.min.js
+  kimai:
+    repo_url: https://github.com/kimai/kimai
+    repo_subdir: public
+    public_paths:
+    - build
+    banners:
+      body_regex:
+      - Kimai
+    cpe: cpe:2.3:a:kimai:kimai
+  librenms:
+    repo_url: https://github.com/librenms/librenms
+    repo_subdir: html
+    public_paths:
+    - css
+    - js
+    banners:
+      body_regex:
+      - LibreNMS
+      - librenms
+    probe_files:
+    - js/librenms.js
+    - css/app.css
+    cpe: cpe:2.3:a:librenms:librenms
+  lidarr:
+    repo_url: https://github.com/Lidarr/Lidarr
+    banners:
+      paths:
+      - path: /initialize.json
+        match: '"instanceName":\s*"Lidarr"'
+    version_probe:
+      paths:
+      - /initialize.json
+      regex: '"version":\s*"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:lidarr:lidarr
+  limesurvey:
+    repo_url: https://github.com/LimeSurvey/LimeSurvey
+    public_paths:
+    - assets
+    - themes
+    banners:
+      body_regex:
+      - LimeSurvey
+      - limesurvey
+    probe_files:
+    - assets/scripts/survey.js
+    cpe: cpe:2.3:a:limesurvey:limesurvey
+  litespeed-cache:
+    repo_url: https://plugins.svn.wordpress.org/litespeed-cache
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/litespeed-cache
+    public_paths:
+    - assets
+    kind: plugin
+  loco-translate:
+    repo_url: https://plugins.svn.wordpress.org/loco-translate
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/loco-translate
+    public_paths:
+    - pub
+    kind: plugin
+  magento2:
+    repo_url: https://github.com/magento/magento2
+    public_paths:
+    - lib/web
+    - app/design
+    banners:
+      body_regex:
+      - data-mage-init
+      - mage-init=
+      - Magento_
+      - /static/version\d
+    probe_files:
+    - lib/web/mage/cookies.js
+    cpe: cpe:2.3:a:magento:magento
+  mailcow:
+    repo_url: https://github.com/mailcow/mailcow-dockerized
+    repo_subdir: data/web
+    public_paths:
+    - css
+    - js
+    - img
+    banners:
+      body_regex:
+      - mailcow
+      - Mailcow
+    probe_files:
+    - js/site/admin.js
+  mastodon:
+    repo_url: https://github.com/mastodon/mastodon
+    banners:
+      body_regex:
+      - id="mastodon"
+    version_probe:
+      paths:
+      - /api/v1/instance
+      regex: '"version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:joinmastodon:mastodon
+  mailpoet:
+    repo_url: https://plugins.svn.wordpress.org/mailpoet
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/mailpoet
+    public_paths:
+    - assets
+    kind: plugin
+  mantisbt:
+    repo_url: https://github.com/mantisbt/mantisbt
+    public_paths:
+    - css
+    - js
+    - images
+    banners:
+      body_regex:
+      - MantisBT
+      - Powered by [^<]*Mantis
+    probe_files:
+    - js/common.js
+    - css/default.css
+    cpe: cpe:2.3:a:mantisbt:mantisbt
+  mattermost:
+    repo_url: https://github.com/mattermost/mattermost
+    banners:
+      headers:
+        X-Version-Id: \d+\.\d+\.\d+
+    version_probe:
+      paths:
+      - /api/v4/system/ping
+      header: X-Version-Id
+      regex: ^(\d+\.\d+\.\d+)
+    cpe: cpe:2.3:a:mattermost:mattermost
+  mealie:
+    repo_url: https://github.com/mealie-recipes/mealie
+    banners:
+      paths:
+      - path: /api/app/about
+        match: '"demoStatus"'
+    version_probe:
+      paths:
+      - /api/app/about
+      regex: '"version":"v?([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:mealie:mealie
+  mediawiki:
+    repo_url: https://github.com/wikimedia/mediawiki
+    public_paths:
+    - resources
+    - skins
+    banners:
+      body_regex:
+      - content="MediaWiki
+      - mw-config
+      - /load.php
+    probe_files:
+    - resources/src/mediawiki.base/mediawiki.base.js
+    - skins/Vector/resources/skins.vector.styles/skin.css
+    dependents:
+      pattern: extensions/*
+    cpe: cpe:2.3:a:mediawiki:mediawiki
+  metabase:
+    repo_url: https://github.com/metabase/metabase
+    banners:
+      paths:
+      - path: /api/session/properties
+        match: '"engines"'
+    version_probe:
+      paths:
+      - /api/session/properties
+      regex: '"tag":"v([0-9][^"]*)'
+      commit_regex: '"hash":"([0-9a-f]{7,40})"'
+    cpe: cpe:2.3:a:metabase:metabase
+  misp:
+    repo_url: https://github.com/MISP/MISP
+    repo_subdir: app/webroot
+    public_paths:
+    - css
+    - js
+    - img
+    banners:
+      body_regex:
+      - MISP
+      - /img/misp
+    probe_files:
+    - css/main.css
+    - js/misp.js
+  modx:
+    repo_url: https://github.com/modxcms/revolution
+    public_paths:
+    - manager/templates
+    - setup/templates
+    banners:
+      body_regex:
+      - content="MODX
+      - MODX
+    probe_files:
+    - manager/templates/default/css/index.css
+  moodle:
+    repo_url: https://github.com/moodle/moodle
+    public_paths:
+    - public
+    - theme
+    - pix
+    - lib/amd/build
+    banners:
+      body_regex:
+      - name="keywords" content="moodle
+      - M\.cfg
+      - /theme/(boost|classic)/
+    probe_files:
+    - lib/amd/build/first.min.js
+    - theme/boost/style/moodle.css
+    dependents:
+      pattern: mod/*
+    cpe: cpe:2.3:a:moodle:moodle
+  movabletype:
+    repo_url: https://github.com/movabletype/movabletype
+    public_paths:
+    - mt-static
+    banners:
+      body_regex:
+      - /mt-static/
+      - Movable Type
+    probe_files:
+    - mt-static/mt.js
+    - mt-static/js/common.js
+  mybb:
+    repo_url: https://github.com/mybb/mybb
+    public_paths:
+    - jscripts
+    - images
+    banners:
+      body_regex:
+      - Powered by[^<]*MyBB
+      - MyBB
+    probe_files:
+    - jscripts/general.js
+    cpe: cpe:2.3:a:mybb:mybb
+  n8n:
+    repo_url: https://github.com/n8n-io/n8n
+    banners:
+      paths:
+      - path: /rest/settings
+        match: '"endpointWebhook"'
+    version_probe:
+      paths:
+      - /rest/settings
+      regex: '"versionCli":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:n8n:n8n
+  nagioscore:
+    repo_url: https://github.com/NagiosEnterprises/nagioscore
+    repo_subdir: html
+    public_paths:
+    - stylesheets
+    - js
+    - images
+    - jquery
+    banners:
+      body_regex:
+      - Nagios Core
+      - nagios
+    probe_files:
+    - stylesheets/common.css
+    - js/jquery.js
+  navidrome:
+    repo_url: https://github.com/navidrome/navidrome
+    banners:
+      paths:
+      - path: /rest/ping?f=json&c=cr&v=1.16.1
+        match: '"type":"navidrome"'
+    version_probe:
+      paths:
+      - /rest/ping?f=json&c=cr&v=1.16.1
+      regex: '"serverVersion":"([0-9][^" ]*)'
+      commit_regex: '"serverVersion":"[^"(]*\(([0-9a-f]{7,})\)'
+    cpe: cpe:2.3:a:navidrome:navidrome
+  netbox:
+    repo_url: https://github.com/netbox-community/netbox
+    repo_subdir: netbox
+    public_paths:
+    - project-static
+    banners:
+      body_regex:
+      - NetBox
+      - netbox
+    probe_files:
+    - project-static/dist/netbox.css
+  netdata:
+    repo_url: https://github.com/netdata/netdata
+    banners:
+      paths:
+      - path: /api/v1/info
+        match: '"hosts-available"'
+    version_probe:
+      paths:
+      - /api/v1/info
+      regex: '"version":"v?([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:netdata:netdata
+  nextcloud:
+    repo_url: https://github.com/nextcloud/server
+    public_paths:
+    - core
+    - dist
+    banners:
+      paths:
+      - path: /status.php
+        match: '"installed"\s*:\s*true'
+      body_regex:
+      - data-requesttoken
+    probe_files:
+    - core/js/dist/main.js
+    - core/css/server.css
+    - core/img/logo/logo.svg
+    dependents:
+      pattern: apps/*
+    cpe: cpe:2.3:a:nextcloud:nextcloud_server
+  nextgen-gallery:
+    repo_url: https://plugins.svn.wordpress.org/nextgen-gallery
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/nextgen-gallery
+    public_paths:
+    - assets
+    - static
+    kind: plugin
+  ninja-forms:
+    repo_url: https://plugins.svn.wordpress.org/ninja-forms
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/ninja-forms
+    public_paths:
+    - assets
+    - build
+    kind: plugin
+  nocodb:
+    repo_url: https://github.com/nocodb/nocodb
+    banners:
+      paths:
+      - path: /api/v1/version
+        match: '"currentVersion"'
+    version_probe:
+      paths:
+      - /api/v1/version
+      regex: '"currentVersion":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:nocodb:nocodb
+  odoo:
+    repo_url: https://github.com/odoo/odoo
+    banners:
+      body_regex:
+      - name="generator" content="Odoo
+    version_probe:
+      paths:
+      - /web/webclient/version_info
+      method: POST
+      body: '{"jsonrpc":"2.0","method":"call","params":{}}'
+      regex: '"server_version":\s*"([^"]+)"'
+    cpe: cpe:2.3:a:odoo:odoo
+  october:
+    repo_url: https://github.com/octobercms/october
+    public_paths:
+    - modules/system/assets
+    - modules/backend/assets
+    - themes
+    banners:
+      body_regex:
+      - October CMS
+      - cms.october
+  ofbiz:
+    repo_url: https://github.com/apache/ofbiz-framework
+    public_paths:
+    - themes
+    - framework/images
+    banners:
+      body_regex:
+      - OFBiz
+      - ofbiz
+    probe_files:
+    - themes/common/webapp/common/css/maincss.css
+  opencart:
+    repo_url: https://github.com/opencart/opencart
+    repo_subdir: upload
+    public_paths:
+    - catalog/view
+    - admin/view
+    banners:
+      body_regex:
+      - content="OpenCart
+      - catalog/view/theme
+      - route=common
+    probe_files:
+    - catalog/view/javascript/common.js
+    cpe: cpe:2.3:a:opencart:opencart
+  openemr:
+    repo_url: https://github.com/openemr/openemr
+    public_paths:
+    - public/assets
+    - public/images
+    - interface/themes
+    banners:
+      body_regex:
+      - OpenEMR
+      - openemr
+    probe_files:
+    - public/assets/jquery/dist/jquery.min.js
+    cpe: cpe:2.3:a:open-emr:openemr
+  openfire:
+    repo_url: https://github.com/igniterealtime/Openfire
+    repo_subdir: xmppserver/src/main/webapp
+    public_paths:
+    - js
+    - images
+    - style
+    banners:
+      body_regex:
+      - Openfire
+      - Admin Console
+    probe_files:
+    - style/global.css
+    - js/setup.js
+  opnsense:
+    repo_url: https://github.com/opnsense/core
+    repo_subdir: src/opnsense/www
+    public_paths:
+    - assets
+    - css
+    - js
+    - themes
+    banners:
+      body_regex:
+      - OPNsense
+      - opnsense
+    probe_files:
+    - js/opnsense.js
+  oscommerce:
+    repo_url: https://github.com/osCommerce/oscommerce2
+    repo_subdir: catalog
+    public_paths:
+    - public
+    - ext
+    - images
+    banners:
+      body_regex:
+      - osCommerce
+      - oscommerce
+    cpe: cpe:2.3:a:oscommerce:oscommerce
+  osticket:
+    repo_url: https://github.com/osTicket/osTicket
+    public_paths:
+    - css
+    - js
+    - assets
+    - images
+    banners:
+      body_regex:
+      - osTicket
+      - /scp/
+      - powered by[^<]*osTicket
+    probe_files:
+    - css/theme.css
+    - js/osticket.js
+    cpe: cpe:2.3:a:osticket:osticket
+  owncloud:
+    repo_url: https://github.com/owncloud/core
+    public_paths:
+    - core
+    - settings
+    banners:
+      paths:
+      - path: /status.php
+        match: '"installed"'
+      body_regex:
+      - oc-config
+      - data-requesttoken
+    probe_files:
+    - core/css/styles.css
+    - core/js/core.js
+    - core/img/logo/logo.svg
+    dependents:
+      pattern: apps/*
+  pfsense:
+    repo_url: https://github.com/pfsense/pfsense
+    repo_subdir: src/usr/local/www
+    public_paths:
+    - css
+    - js
+    - vendor
+    banners:
+      body_regex:
+      - pfSense
+      - Login to pfSense
+    probe_files:
+    - css/pfSense.css
+    - js/pfSenseHelpers.js
+  photo-gallery:
+    repo_url: https://plugins.svn.wordpress.org/photo-gallery
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/photo-gallery
+    public_paths:
+    - css
+    - js
+    - images
+    kind: plugin
+  photoprism:
+    repo_url: https://github.com/photoprism/photoprism
+    banners:
+      paths:
+      - path: /api/v1/config
+        match: PhotoPrism
+    version_probe:
+      paths:
+      - /api/v1/config
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"version":"[0-9]+-([0-9a-f]{7,})'
+    cpe: cpe:2.3:a:photoprism:photoprism
+  phpbb:
+    repo_url: https://github.com/phpbb/phpbb
+    repo_subdir: phpBB
+    public_paths:
+    - styles
+    - assets
+    banners:
+      body_regex:
+      - Powered by [^<]*phpBB
+      - phpbb3_
+      - /styles/prosilver/
+    probe_files:
+    - assets/javascript/core.js
+    - styles/prosilver/theme/stylesheet.css
+    dependents:
+      pattern: ext/*
+    cpe: cpe:2.3:a:phpbb:phpbb
+  phpipam:
+    repo_url: https://github.com/phpipam/phpipam
+    public_paths:
+    - css
+    - js
+    banners:
+      body_regex:
+      - phpipam
+      - phpIPAM
+    probe_files:
+    - js/app.js
+    - css/default/style.css
+    cpe: cpe:2.3:a:phpipam:phpipam
+  phplist:
+    repo_url: https://github.com/phpList/phplist3
+    repo_subdir: public_html/lists
+    public_paths:
+    - styles
+    - js
+    - ui
+    banners:
+      body_regex:
+      - phpList
+      - phplist
+    probe_files:
+    - styles/structure.css
+  phpmyadmin:
+    repo_url: https://github.com/phpmyadmin/phpmyadmin
+    public_paths:
+    - public
+    - js
+    - themes
+    banners:
+      paths:
+      - path: /index.php
+        match: phpMyAdmin
+      body_regex:
+      - phpMyAdmin
+    probe_files:
+    - themes/pmahomme/css/theme.css
+    - js/console.js
+    cpe: cpe:2.3:a:phpmyadmin:phpmyadmin
+  phppgadmin:
+    repo_url: https://github.com/phppgadmin/phppgadmin
+    public_paths:
+    - themes
+    - js
+    - images
+    - xloadtree
+    banners:
+      body_regex:
+      - phpPgAdmin
+      - phppgadmin
+    probe_files:
+    - themes/default/global.css
+  piwigo:
+    repo_url: https://github.com/Piwigo/Piwigo
+    public_paths:
+    - themes
+    - js
+    - plugins
+    banners:
+      body_regex:
+      - Piwigo
+      - content="Piwigo
+    probe_files:
+    - themes/default/theme.css
+    cpe: cpe:2.3:a:piwigo:piwigo
+  portainer:
+    repo_url: https://github.com/portainer/portainer
+    banners:
+      paths:
+      - path: /api/status
+        match: '"InstanceID"'
+    version_probe:
+      paths:
+      - /api/status
+      regex: '"Version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:portainer:portainer
+  postfixadmin:
+    repo_url: https://github.com/postfixadmin/postfixadmin
+    repo_subdir: public
+    public_paths:
+    - css
+    - js
+    - images
+    banners:
+      body_regex:
+      - Postfix ?Admin
+      - postfixadmin
+    probe_files:
+    - css/default.css
+  powerdns-admin:
+    repo_url: https://github.com/PowerDNS-Admin/PowerDNS-Admin
+    repo_subdir: powerdnsadmin
+    public_paths:
+    - static
+    banners:
+      body_regex:
+      - PowerDNS-Admin
+      - PowerDNS
+    probe_files:
+    - static/assets/css/custom.css
+  prestashop:
+    repo_url: https://github.com/PrestaShop/PrestaShop
+    public_paths:
+    - themes
+    - js
+    - img
+    banners:
+      body_regex:
+      - content="PrestaShop
+      - prestashop
+      - /themes/classic/
+    probe_files:
+    - js/jquery/jquery-3.7.1.min.js
+    - themes/classic/assets/css/theme.css
+    dependents:
+      pattern: modules/*
+    cpe: cpe:2.3:a:prestashop:prestashop
+  privatebin:
+    repo_url: https://github.com/PrivateBin/PrivateBin
+    public_paths:
+    - css
+    - js
+    - img
+    banners:
+      body_regex:
+      - PrivateBin
+    cpe: cpe:2.3:a:privatebin:privatebin
+  processwire:
+    repo_url: https://github.com/processwire/processwire
+    public_paths:
+    - wire
+    banners:
+      body_regex:
+      - ProcessWire
+  prometheus:
+    repo_url: https://github.com/prometheus/prometheus
+    banners:
+      paths:
+      - path: /api/v1/status/buildinfo
+        match: '"goVersion"'
+    version_probe:
+      paths:
+      - /api/v1/status/buildinfo
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"revision":"([0-9a-f]{40})"'
+    cpe: cpe:2.3:a:prometheus:prometheus
+  prowlarr:
+    repo_url: https://github.com/Prowlarr/Prowlarr
+    banners:
+      paths:
+      - path: /initialize.json
+        match: '"instanceName":\s*"Prowlarr"'
+    version_probe:
+      paths:
+      - /initialize.json
+      regex: '"version":\s*"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:prowlarr:prowlarr
+  punbb:
+    repo_url: https://github.com/punbb/punbb
+    public_paths:
+    - style
+    - img
+    - include/js
+    banners:
+      body_regex:
+      - Powered by PunBB
+      - PunBB
+  rocketchat:
+    repo_url: https://github.com/RocketChat/Rocket.Chat
+    banners:
+      body_regex:
+      - content="Rocket.Chat
+    version_probe:
+      paths:
+      - /api/info
+      regex: '"version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:rocket.chat:rocket.chat
+  radarr:
+    repo_url: https://github.com/Radarr/Radarr
+    banners:
+      paths:
+      - path: /initialize.json
+        match: '"instanceName":\s*"Radarr"'
+    version_probe:
+      paths:
+      - /initialize.json
+      regex: '"version":\s*"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:radarr:radarr
+  really-simple-ssl:
+    repo_url: https://plugins.svn.wordpress.org/really-simple-ssl
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/really-simple-ssl
+    public_paths:
+    - assets
+    kind: plugin
+  redirection:
+    repo_url: https://plugins.svn.wordpress.org/redirection
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/redirection
+    public_paths:
+    - build
+    - images
+    kind: plugin
+  redmine:
+    repo_url: https://github.com/redmine/redmine
+    repo_subdir: public
+    public_paths:
+    - stylesheets
+    - javascripts
+    - images
+    - themes
+    banners:
+      body_regex:
+      - content="Redmine
+      - data-relative_url_root
+      - Powered by [^<]*Redmine
+    probe_files:
+    - stylesheets/application.css
+    - javascripts/application.js
+    dependents:
+      pattern: plugins/*
+    cpe: cpe:2.3:a:redmine:redmine
+  roundcube:
+    repo_url: https://github.com/roundcube/roundcubemail
+    public_paths:
+    - skins
+    - program/js
+    - program/resources
+    banners:
+      body_regex:
+      - Roundcube Webmail
+      - rcmail\.
+    probe_files:
+    - program/js/app.js
+    - skins/elastic/styles/styles.css
+    - skins/elastic/ui.js
+    cpe: cpe:2.3:a:roundcube:webmail
+  rss-bridge:
+    repo_url: https://github.com/RSS-Bridge/rss-bridge
+    public_paths:
+    - static
+    banners:
+      body_regex:
+      - RSS-Bridge
+    cpe: cpe:2.3:a:rss-bridge:rss-bridge
+  rt:
+    repo_url: https://github.com/bestpractical/rt
+    repo_subdir: share
+    public_paths:
+    - static
+    banners:
+      body_regex:
+      - Request Tracker
+      - Best Practical
+      - RT for
+  seafile:
+    repo_url: https://github.com/haiwen/seahub
+    public_paths:
+    - media/css
+    - media/js
+    - media/img
+    - media/favicons
+    banners:
+      body_regex:
+      - Seafile
+      - seahub
+    probe_files:
+    - media/js/base.js
+    - media/css/sf_font3/iconfont.css
+    - media/css/seahub.css
+    - media/css/seafile-ui.css
+    - media/img/seafile-logo.png
+    cpe: cpe:2.3:a:seafile:seafile
+  searxng:
+    repo_url: https://github.com/searxng/searxng
+    repo_subdir: searx
+    public_paths:
+    - static
+    banners:
+      paths:
+      - path: /config
+        match: searxng/searxng
+    version_probe:
+      paths:
+      - /config
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"version":"[^"+]+\+([0-9a-f]{7,})'
+    cpe: cpe:2.3:a:searxng:searxng
+  seo-by-rank-math:
+    repo_url: https://plugins.svn.wordpress.org/seo-by-rank-math
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/seo-by-rank-math
+    public_paths:
+    - assets
+    kind: plugin
+  serendipity:
+    repo_url: https://github.com/s9y/Serendipity
+    public_paths:
+    - templates
+    banners:
+      body_regex:
+      - Serendipity
+      - serendipity\[
+    cpe: cpe:2.3:a:s9y:serendipity
+  simplesamlphp:
+    repo_url: https://github.com/simplesamlphp/simplesamlphp
+    public_paths:
+    - www
+    - public
+    banners:
+      body_regex:
+      - SimpleSAMLphp
+      - simplesaml
+    probe_files:
+    - resources/default.css
+  smf:
+    repo_url: https://github.com/SimpleMachines/SMF
+    public_paths:
+    - Themes
+    banners:
+      body_regex:
+      - Powered by[^<]*SMF
+      - Simple Machines
+      - /Themes/default/
+    probe_files:
+    - Themes/default/scripts/script.js
+    - Themes/default/css/index.css
+  sonarr:
+    repo_url: https://github.com/Sonarr/Sonarr
+    banners:
+      paths:
+      - path: /initialize.json
+        match: '"instanceName":\s*"Sonarr"'
+    version_probe:
+      paths:
+      - /initialize.json
+      regex: '"version":\s*"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:sonarr:sonarr
+  spip:
+    repo_url: https://git.spip.net/spip/spip.git
+    commit_url_tpl: https://git.spip.net/spip/spip/-/tree/{sha}
+    public_paths:
+    - prive
+    - dist
+    banners:
+      body_regex:
+      - spip
+      - SPIP
+      - composer=
+    probe_files:
+    - prive/javascript/jquery.js
+  suitecrm:
+    repo_url: https://github.com/SuiteCRM/SuiteCRM
+    public_paths:
+    - themes
+    - include/javascript
+    banners:
+      body_regex:
+      - SuiteCRM
+      - suitecrm
+      - SugarCRM
+    probe_files:
+    - include/javascript/sugar_grp1.js
+    cpe: cpe:2.3:a:salesagility:suitecrm
+  synapse:
+    repo_url: https://github.com/element-hq/synapse
+    banners:
+      paths:
+      - path: /_matrix/federation/v1/version
+        match: '"name":"Synapse"'
+    version_probe:
+      paths:
+      - /_matrix/federation/v1/version
+      regex: '"version":"([0-9][^" (]*)'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:matrix:synapse
+  tablepress:
+    repo_url: https://github.com/TablePress/TablePress
+    served_prefix: wp-content/plugins/tablepress
+    public_paths:
+    - admin
+    - blocks
+    kind: plugin
+  textpattern:
+    repo_url: https://github.com/textpattern/textpattern
+    public_paths:
+    - textpattern
+    banners:
+      body_regex:
+      - Textpattern
+      - txp_
+  tiki:
+    repo_url: https://gitlab.com/tikiwiki/tiki.git
+    commit_url_tpl: https://gitlab.com/tikiwiki/tiki/-/tree/{sha}
+    public_paths:
+    - themes
+    - lib
+    banners:
+      body_regex:
+      - Tiki Wiki
+      - tiki-index
+      - TikiWiki
+    probe_files:
+    - themes/base_files/css/tiki_base.css
+  typo3:
+    repo_url: https://github.com/TYPO3/typo3
+    public_paths:
+    - typo3/sysext/core/Resources/Public
+    - typo3/sysext/backend/Resources/Public
+    - typo3/sysext/frontend/Resources/Public
+    - typo3/sysext/install/Resources/Public
+    banners:
+      body_regex:
+      - content="TYPO3
+      - typo3temp
+      - /typo3/
+    probe_files:
+    - typo3/sysext/backend/Resources/Public/JavaScript/backend.js
+    cpe: cpe:2.3:a:typo3:typo3
+  updraftplus:
+    repo_url: https://plugins.svn.wordpress.org/updraftplus
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/updraftplus
+    public_paths:
+    - css
+    - js
+    - images
+    kind: plugin
+  vanilla:
+    repo_url: https://github.com/vanilla/vanilla
+    public_paths:
+    - applications
+    - js
+    - themes
+    banners:
+      body_regex:
+      - Powered by[^<]*Vanilla
+      - content="Vanilla
+      - Vanilla Forums
+    probe_files:
+    - js/global.js
+  vaultwarden:
+    repo_url: https://github.com/dani-garcia/vaultwarden
+    banners:
+      paths:
+      - path: /api/config
+        match: '"gitHash"'
+    version_probe:
+      paths:
+      - /api/config
+      regex: '"version":"([^"]+)"'
+      commit_regex: '"gitHash":"([0-9a-f]{7,40})"'
+    cpe: cpe:2.3:a:vaultwarden:vaultwarden
+  w3-total-cache:
+    repo_url: https://plugins.svn.wordpress.org/w3-total-cache
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/w3-total-cache
+    public_paths:
+    - pub
+    kind: plugin
+  wackowiki:
+    repo_url: https://github.com/WackoWiki/wackowiki
+    repo_subdir: src
+    public_paths:
+    - theme
+    - js
+    - image
+    banners:
+      body_regex:
+      - WackoWiki
+    cpe: cpe:2.3:a:wackowiki:wackowiki
+  webmin:
+    repo_url: https://github.com/webmin/webmin
+    public_paths:
+    - unauthenticated
+    - images
+    banners:
+      body_regex:
+      - Webmin
+      - session_login.cgi
+    probe_files:
+    - unauthenticated/style.css
+    - unauthenticated/sorttable.js
+  woocommerce:
+    repo_url: https://github.com/woocommerce/woocommerce
+    repo_subdir: plugins/woocommerce
+    served_prefix: wp-content/plugins/woocommerce
+    public_paths:
+    - assets
+    probe_files:
+    - assets/css/woocommerce.css
+    kind: plugin
+    cpe: cpe:2.3:a:woocommerce:woocommerce
+  wordfence:
+    repo_url: https://plugins.svn.wordpress.org/wordfence
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wordfence
+    public_paths:
+    - css
+    - js
+    - images
+    kind: plugin
+    cpe: cpe:2.3:a:wordfence:wordfence
+  wordpress:
+    repo_url: https://github.com/WordPress/WordPress
+    public_paths:
+    - wp-includes/js
+    - wp-includes/css
+    - wp-admin/js
+    - wp-admin/css
+    banners:
+      body_regex:
+      - wp-(content|includes)/
+      - name="generator" content="WordPress
+    probe_files:
+    - wp-includes/js/wp-emoji-release.min.js
+    - wp-includes/css/dashicons.min.css
+    - wp-admin/css/common.min.css
+    dependents:
+      pattern: wp-content/plugins/*
+      projects:
+      - acf
+      - akismet
+      - bbpress
+      - buddypress
+      - classic-editor
+      - contact-form-7
+      - elementor
+      - tablepress
+      - woocommerce
+      - wordfence
+      - wordpress-seo
+      - wp-super-cache
+    cpe: cpe:2.3:a:wordpress:wordpress
+  wordpress-seo:
+    repo_url: https://github.com/Yoast/wordpress-seo
+    served_prefix: wp-content/plugins/wordpress-seo
+    public_paths:
+    - css
+    - js
+    - packages
+    probe_files:
+    - css/dist/adminbar-1340.css
+    kind: plugin
+    cpe: cpe:2.3:a:yoast:yoast_seo
+  wp-fastest-cache:
+    repo_url: https://plugins.svn.wordpress.org/wp-fastest-cache
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wp-fastest-cache
+    public_paths:
+    - css
+    - js
+    - images
+    kind: plugin
+  wp-mail-smtp:
+    repo_url: https://plugins.svn.wordpress.org/wp-mail-smtp
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wp-mail-smtp
+    public_paths:
+    - assets
+    kind: plugin
+  wp-optimize:
+    repo_url: https://plugins.svn.wordpress.org/wp-optimize
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wp-optimize
+    public_paths:
+    - css
+    - js
+    - images
+    kind: plugin
+  wp-statistics:
+    repo_url: https://plugins.svn.wordpress.org/wp-statistics
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wp-statistics
+    public_paths:
+    - assets
+    kind: plugin
+  wp-super-cache:
+    repo_url: https://github.com/Automattic/wp-super-cache
+    served_prefix: wp-content/plugins/wp-super-cache
+    public_paths:
+    - css
+    - js
+    probe_files:
+    - css/admin.css
+    kind: plugin
+  wpforms-lite:
+    repo_url: https://plugins.svn.wordpress.org/wpforms-lite
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wpforms-lite
+    public_paths:
+    - assets
+    kind: plugin
+  xoops:
+    repo_url: https://github.com/XOOPS/XoopsCore25
+    repo_subdir: htdocs
+    public_paths:
+    - themes
+    - images
+    - modules
+    banners:
+      body_regex:
+      - XOOPS
+  xwiki:
+    repo_url: https://github.com/xwiki/xwiki-platform
+    public_paths:
+    - xwiki-platform-core/xwiki-platform-web/xwiki-platform-web-war/src/main/webapp
+    banners:
+      body_regex:
+      - XWiki
+      - xwiki
+  zabbix:                        # UI assets are compiled/concatenated (build-artifact) -> not
+                                 # git-blob; exact version via the open JSON-RPC apiinfo.version.
+    repo_url: https://github.com/zabbix/zabbix
+    banners:
+      body_regex:
+      - Zabbix SIA
+      - zabbix.css
+    version_probe:
+      paths:
+      - /api_jsonrpc.php
+      method: POST
+      body: '{"jsonrpc":"2.0","method":"apiinfo.version","params":{},"id":1}'
+      content_type: application/json-rpc
+      regex: '"result"\s*:\s*"([0-9][0-9.a-z]*)"'
+    cpe: cpe:2.3:a:zabbix:zabbix
+  zencart:
+    repo_url: https://github.com/zencart/zencart
+    public_paths:
+    - includes/templates
+    - includes/modules
+    banners:
+      body_regex:
+      - Zen Cart
+      - zenid
+      - zencart
+    probe_files:
+    - includes/templates/template_default/css/stylesheet.css
+  zenphoto:
+    repo_url: https://github.com/zenphoto/zenphoto
+    public_paths:
+    - zp-core
+    - themes
+    banners:
+      body_regex:
+      - zenphoto
+      - Zenphoto
+  zoneminder:
+    repo_url: https://github.com/ZoneMinder/zoneminder
+    repo_subdir: web
+    public_paths:
+    - css
+    - js
+    - skins
+    - graphics
+    banners:
+      body_regex:
+      - ZoneMinder
+      - zm[A-Za-z]
+    probe_files:
+    - js/jquery.js
+  backdrop:
+    repo_url: https://github.com/backdrop/backdrop
+    public_paths:
+    - core
+    banners:
+      body_regex:
+      - Backdrop CMS
+    cpe: cpe:2.3:a:backdropcms:backdrop
+  yourls:
+    repo_url: https://github.com/YOURLS/YOURLS
+    public_paths:
+    - css
+    - js
+    - images
+    banners:
+      body_regex:
+      - YOURLS
+    cpe: cpe:2.3:a:yourls:yourls
+  matomo:
+    repo_url: https://github.com/matomo-org/matomo
+    public_paths:
+    - js
+    - libs
+    - plugins
+    banners:
+      # Precise markers for the Matomo APP itself — NOT the bare word "Matomo", which appears in the
+      # analytics tracker snippet ("Matomo Tag") that thousands of unrelated sites embed.
+      body_regex:
+      - 'Matomo # free'
+      - 'Piwik # free'
+      - 'piwik=\{'
+    cpe: cpe:2.3:a:matomo:matomo
+  shaarli:
+    repo_url: https://github.com/shaarli/Shaarli
+    public_paths:
+    - tpl
+    - plugins
+    banners:
+      body_regex:
+      - Shaarli
+  friendica:
+    repo_url: https://github.com/friendica/friendica
+    public_paths:
+    - view
+    - images
+    - static
+    banners:
+      body_regex:
+      - Friendica
+    cpe: cpe:2.3:a:friendica:friendica
+  projectsend:
+    repo_url: https://github.com/projectsend/projectsend
+    public_paths:
+    - assets
+    - templates
+    banners:
+      body_regex:
+      - ProjectSend
+    cpe: cpe:2.3:a:projectsend:projectsend
+  freshrss:
+    repo_url: https://github.com/FreshRSS/FreshRSS
+    repo_subdir: p
+    public_paths:
+    - themes
+    - scripts
+    banners:
+      body_regex:
+      - FreshRSS
+    cpe: cpe:2.3:a:freshrss:freshrss
+  stirling-pdf:
+    repo_url: https://github.com/Stirling-Tools/Stirling-PDF
+    banners:
+      paths:
+      - path: /api/v1/info/status
+        match: '"status":"UP"'
+    version_probe:
+      paths:
+      - /api/v1/info/status
+      regex: '"version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:stirling-pdf:stirling-pdf
+  subrion:
+    repo_url: https://github.com/intelliants/subrion
+    public_paths:
+    - js
+    - templates
+    - front
+    banners:
+      body_regex:
+      - Subrion
+    cpe: cpe:2.3:a:intelliants:subrion_cms
+  getsimple:
+    repo_url: https://github.com/GetSimpleCMS/GetSimpleCMS
+    public_paths:
+    - theme
+    - plugins
+    banners:
+      body_regex:
+      - GetSimple
+    cpe: cpe:2.3:a:get-simple:getsimple_cms
+  htmly:
+    repo_url: https://github.com/danpros/htmly
+    public_paths:
+    - themes
+    - system
+    banners:
+      body_regex:
+      - HTMLy
+    cpe: cpe:2.3:a:htmly:htmly
+  pico:
+    repo_url: https://github.com/picocms/Pico
+    public_paths:
+    - assets
+    - themes
+    banners:
+      body_regex:
+      - picocms
+      - content="Pico
+  lam:
+    repo_url: https://github.com/LDAPAccountManager/lam
+    repo_subdir: lam
+    public_paths:
+    - style
+    - graphics
+    - templates/lib
+    - lib
+    - js
+    banners:
+      body_regex:
+      - LDAP Account Manager
+    cpe: cpe:2.3:a:ldap_account_manager:ldap_account_manager
+  phpldapadmin:
+    repo_url: https://github.com/leenooks/phpLDAPadmin
+    repo_subdir: htdocs
+    public_paths:
+    - css
+    - js
+    - images
+    banners:
+      body_regex:
+      - phpLDAPadmin
+    cpe: cpe:2.3:a:phpldapadmin:phpldapadmin
+  question2answer:
+    repo_url: https://github.com/q2a/question2answer
+    public_paths:
+    - qa-content
+    - qa-theme
+    - qa-plugin
+    banners:
+      body_regex:
+      - Question2Answer
+      - Powered by[^<]{0,30}Q2A
+    cpe: cpe:2.3:a:question2answer:question2answer
+  racktables:
+    repo_url: https://github.com/RackTables/racktables
+    repo_subdir: wwwroot
+    public_paths:
+    - css
+    - js
+    - pix
+    - static
+    banners:
+      body_regex:
+      - RackTables
+    cpe: cpe:2.3:a:racktables:racktables
+  opendcim:
+    repo_url: https://github.com/opendcim/openDCIM
+    public_paths:
+    - css
+    - js
+    - images
+    - fonts
+    banners:
+      body_regex:
+      - openDCIM
+    cpe: cpe:2.3:a:opendcim:opendcim
+  omeka:
+    repo_url: https://github.com/omeka/Omeka
+    public_paths:
+    - application/views/scripts/css
+    - application/views/scripts/images
+    - themes/default/css
+    - themes/default/javascripts
+    banners:
+      body_regex:
+      - Omeka
+    cpe: cpe:2.3:a:omeka:omeka
+  elkarte:
+    repo_url: https://github.com/elkarte/Elkarte
+    public_paths:
+    - themes/default/css
+    - themes/default/scripts
+    - themes/default/images
+    banners:
+      body_regex:
+      - ElkArte
+    cpe: cpe:2.3:a:elkarte:elkarte
+  forgejo:
+    repo_url: https://codeberg.org/forgejo/forgejo
+    commit_url_tpl: '{repo_url}/commit/{sha}'
+    banners:
+      paths:
+      - path: /api/v1/version
+        match: '\+gitea-'
+    version_probe:
+      paths:
+      - /api/v1/version
+      regex: '"version":"v?([0-9]+(?:\.[0-9]+)+)'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:forgejo:forgejo
+  formidable:
+    repo_url: https://plugins.svn.wordpress.org/formidable
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/formidable
+    public_paths:
+    - css
+    - js
+    - images
+    kind: plugin
+  forminator:
+    repo_url: https://plugins.svn.wordpress.org/forminator
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/forminator
+    public_paths:
+    - assets
+    - build
+    kind: plugin
+  foswiki:
+    repo_url: https://github.com/foswiki/distro
+    repo_subdir: core
+    public_paths:
+    - pub/System
+    banners:
+      body_regex:
+      - Foswiki
+    cpe: cpe:2.3:a:foswiki:foswiki
+  all-in-one-seo-pack:
+    repo_url: https://plugins.svn.wordpress.org/all-in-one-seo-pack
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/all-in-one-seo-pack
+    public_paths:
+    - dist
+    kind: plugin
+  audiobookshelf:
+    repo_url: https://github.com/advplyr/audiobookshelf
+    banners:
+      paths:
+      - path: /status
+        match: '"app":"audiobookshelf"'
+    version_probe:
+      paths:
+      - /status
+      regex: '"serverVersion":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:audiobookshelf:audiobookshelf
+  awstats:
+    repo_url: https://github.com/eldy/awstats
+    repo_subdir: wwwroot
+    public_paths:
+    - css
+    - icon
+    - js
+    banners:
+      body_regex:
+      - AWStats
+    cpe: cpe:2.3:a:awstats:awstats
+  flatpress:
+    repo_url: https://github.com/flatpressblog/flatpress
+    public_paths:
+    - fp-interface/themes
+    - fp-interface/shared
+    - fp-plugins
+    - admin/res
+    banners:
+      body_regex:
+      - FlatPress
+    cpe: cpe:2.3:a:flatpress:flatpress
+  pixelfed:
+    repo_url: https://github.com/pixelfed/pixelfed
+    repo_subdir: public
+    public_paths:
+    - css
+    - js
+    banners:
+      body_regex:
+      - Pixelfed
+    cpe: cpe:2.3:a:pixelfed:pixelfed
+  pluxml:
+    repo_url: https://github.com/pluxml/PluXml
+    public_paths:
+    - themes
+    - core/admin/theme
+    - core/admin/css
+    - core/admin/images
+    banners:
+      body_regex:
+      - PluXml
+    cpe: cpe:2.3:a:pluxml:pluxml
+  actualbudget:
+    repo_url: https://github.com/actualbudget/actual
+    banners:
+      paths:
+      - path: /info
+        match: '@actual-app/sync-server'
+    version_probe:
+      paths:
+      - /info
+      regex: '"version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:actualbudget:actual
+  admidio:
+    repo_url: https://github.com/Admidio/admidio
+    public_paths:
+    - themes
+    - libs
+    - system/js
+    banners:
+      body_regex:
+      - Admidio
+    cpe: cpe:2.3:a:admidio:admidio
+  wallabag:
+    repo_url: https://github.com/wallabag/wallabag
+    banners:
+      paths:
+      - path: /api/info
+        match: '"appname":"wallabag"'
+    version_probe:
+      paths:
+      - /api/info
+      regex: '"version":"([^"]+)"'
+      resolve_commit_from_tags: true
+    cpe: cpe:2.3:a:wallabag:wallabag
+  webcalendar:
+    repo_url: https://github.com/craigk5n/webcalendar
+    public_paths:
+    - css
+    - images
+    - includes/js
+    banners:
+      body_regex:
+      - WebCalendar
+    cpe: cpe:2.3:a:webcalendar:webcalendar
+  monstra:
+    repo_url: https://github.com/monstra-cms/monstra
+    public_paths:
+    - public/assets
+    - themes
+    - admin/themes
+    banners:
+      body_regex:
+      - Monstra
+    cpe: cpe:2.3:a:monstra:monstra
+  wondercms:
+    repo_url: https://github.com/WonderCMS/wondercms
+    public_paths:
+    - themes
+    - plugins
+    - assets
+    banners:
+      body_regex:
+      - WonderCMS
+    cpe: cpe:2.3:a:wondercms:wondercms
+  thirtybees:
+    repo_url: https://github.com/thirtybees/thirtybees
+    public_paths:
+    - themes
+    - js
+    - img
+    - admin-dev/themes
+    banners:
+      body_regex:
+      - thirty bees
+      - thirtybees
+    cpe: cpe:2.3:a:thirtybees:thirtybees
+  litecart:
+    repo_url: https://github.com/litecart/litecart
+    repo_subdir: public_html
+    public_paths:
+    - includes/templates
+    - admin
+    - ext
+    - images
+    banners:
+      body_regex:
+      - LiteCart
+    cpe: cpe:2.3:a:litecart:litecart
+  mailchimp-for-wp:
+    repo_url: https://plugins.svn.wordpress.org/mailchimp-for-wp
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/mailchimp-for-wp
+    public_paths:
+    - assets
+    kind: plugin
+  google-analytics-for-wordpress:
+    repo_url: https://plugins.svn.wordpress.org/google-analytics-for-wordpress
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/google-analytics-for-wordpress
+    public_paths:
+    - assets
+    kind: plugin
+  so-widgets-bundle:
+    repo_url: https://plugins.svn.wordpress.org/so-widgets-bundle
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/so-widgets-bundle
+    public_paths:
+    - css
+    - js
+    kind: plugin
+  post-smtp:
+    repo_url: https://plugins.svn.wordpress.org/post-smtp
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/post-smtp
+    public_paths:
+    - assets
+    - style
+    - script
+    kind: plugin
+  cookie-law-info:
+    repo_url: https://plugins.svn.wordpress.org/cookie-law-info
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/cookie-law-info
+    public_paths:
+    - public
+    kind: plugin
+  simple-history:
+    repo_url: https://plugins.svn.wordpress.org/simple-history
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/simple-history
+    public_paths:
+    - build
+    - css
+    - js
+    kind: plugin
+  wordpress-popular-posts:
+    repo_url: https://plugins.svn.wordpress.org/wordpress-popular-posts
+    source: wporg
+    commit_url_tpl: '{repo_url}/tags/{sha}/'
+    served_prefix: wp-content/plugins/wordpress-popular-posts
+    public_paths:
+    - assets
+    kind: plugin

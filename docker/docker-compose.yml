@@ -1,0 +1,328 @@
+# Local-instance e2e harness for CommiPiste (the WASABO approach).
+#
+# Spins up DEFAULT installs of indexed apps at pinned versions, so each scan has an exact known
+# ground truth — and, crucially, covers internal-only tools (Zabbix, Cacti, GLPI, …) that have no
+# public instances to test against. Tests live in tests/test_e2e_docker.py (gated CR_E2E_DOCKER=1).
+#
+# Profiles let you bring up subsets:
+#   docker compose --profile light    up -d   # no-DB, fast — good for a first run
+#   docker compose --profile cms      up -d
+#   docker compose --profile internal up -d   # the tools with no public instances
+#   docker compose --profile all      up -d
+#
+# Then:  CR_E2E_DOCKER=1 pytest tests/test_e2e_docker.py -q   (wait ~1-2 min for apps to boot)
+# Pinned tags are the ground truth — bump them and the matching DOCKER_CASES version together.
+
+services:
+  # ---- light: single container, serve fingerprintable content with no DB setup ----
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.1
+    profiles: [light, all]
+    ports: ["8001:80"]
+    environment: {PMA_ARBITRARY: "1"}
+
+  grafana:                       # active-probe: /api/health
+    image: grafana/grafana:11.0.0
+    profiles: [light, all]
+    ports: ["8002:3000"]
+
+  # (gitea is covered by public instances in test_e2e_instances.py — gitea.com, codeberg.org —
+  #  rather than Docker: old Gitea can't be install-locked via env, so its API stays behind /install.)
+
+  jenkins:                       # active-probe: X-Jenkins header
+    image: jenkins/jenkins:2.440.3-lts-jdk17
+    profiles: [light, all]
+    ports: ["8004:8080"]
+
+  # ---- cms: serve their static tree even before the install wizard is completed ----
+  wordpress:
+    image: wordpress:6.5-apache
+    profiles: [cms, all]
+    ports: ["8011:80"]
+
+  mediawiki:
+    image: mediawiki:1.41.1
+    profiles: [cms, all]
+    ports: ["8012:80"]
+
+  drupal:
+    image: drupal:10.2-apache
+    profiles: [cms, all]
+    ports: ["8013:80"]
+
+  nextcloud:
+    image: nextcloud:28.0.4-apache
+    profiles: [cms, all]
+    ports: ["8014:80"]
+
+  joomla:
+    image: joomla:5.1-apache
+    profiles: [cms, all]
+    ports: ["8015:80"]
+    environment: {JOOMLA_DB_HOST: joomla-db, JOOMLA_DB_PASSWORD: pw}
+    depends_on: [joomla-db]
+  joomla-db:
+    image: mariadb:11
+    profiles: [cms, all]
+    environment: {MARIADB_ROOT_PASSWORD: pw, MARIADB_DATABASE: joomla}
+
+  # ---- internal: the high-value tools with NO public instances (the reason this harness exists) ----
+  # NB: Zabbix's UI is a build-artifact (compiled/concatenated CSS/JS) so it is NOT git-blob matched;
+  # instead it is an ACTIVE-PROBE app — exact version via the open JSON-RPC apiinfo.version (needs the
+  # server+db so the schema exists). Run with --active.
+  zabbix:
+    image: zabbix/zabbix-web-nginx-mysql:alpine-6.4-latest
+    profiles: [internal, all]
+    ports: ["8021:8080"]
+    environment: {DB_SERVER_HOST: zabbix-db, MYSQL_DATABASE: zabbix, MYSQL_USER: zabbix, MYSQL_PASSWORD: pw, MYSQL_ROOT_PASSWORD: pw, ZBX_SERVER_HOST: zabbix-srv}
+    depends_on: [zabbix-db, zabbix-srv]
+  zabbix-srv:
+    image: zabbix/zabbix-server-mysql:alpine-6.4-latest
+    profiles: [internal, all]
+    environment: {DB_SERVER_HOST: zabbix-db, MYSQL_DATABASE: zabbix, MYSQL_USER: zabbix, MYSQL_PASSWORD: pw, MYSQL_ROOT_PASSWORD: pw}
+    depends_on: [zabbix-db]
+  zabbix-db:
+    image: mariadb:10.6
+    profiles: [internal, all]
+    command: ["--character-set-server=utf8", "--collation-server=utf8_bin"]
+    environment: {MARIADB_DATABASE: zabbix, MARIADB_USER: zabbix, MARIADB_PASSWORD: pw, MARIADB_ROOT_PASSWORD: pw}
+
+  netbox:
+    image: netboxcommunity/netbox:v4.0.3
+    profiles: [internal, all]
+    ports: ["8022:8080"]
+    environment: {DB_HOST: netbox-db, DB_NAME: netbox, DB_USER: netbox, DB_PASSWORD: pw, REDIS_HOST: netbox-redis, SECRET_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef"}
+    depends_on: [netbox-db, netbox-redis]
+  netbox-db:
+    image: postgres:16-alpine
+    profiles: [internal, all]
+    environment: {POSTGRES_DB: netbox, POSTGRES_USER: netbox, POSTGRES_PASSWORD: pw}
+  netbox-redis:
+    image: redis:7-alpine
+    profiles: [internal, all]
+
+  glpi:
+    image: diouxx/glpi:10.0.15
+    profiles: [internal, all]
+    ports: ["8023:80"]
+    depends_on: [glpi-db]
+  glpi-db:
+    image: mariadb:11
+    profiles: [internal, all]
+    environment: {MARIADB_DATABASE: glpi, MARIADB_USER: glpi, MARIADB_PASSWORD: pw, MARIADB_ROOT_PASSWORD: pw}
+
+  # ---- legacy: specific OLD versions (hard to find live; where the CVEs actually are). They serve
+  #      their static tree without DB setup, so no sidecars are needed for fingerprinting. ----
+  wordpress-4_9:
+    image: wordpress:4.9-apache
+    profiles: [legacy, all]
+    ports: ["8101:80"]
+  wordpress-5_0:
+    image: wordpress:5.0-apache
+    profiles: [legacy, all]
+    ports: ["8102:80"]
+  nextcloud-20:
+    image: nextcloud:20-apache
+    profiles: [legacy, all]
+    ports: ["8103:80"]
+  mediawiki-1_35:
+    image: mediawiki:1.35
+    profiles: [legacy, all]
+    ports: ["8104:80"]
+  drupal-9_4:
+    image: drupal:9.4.14-apache
+    profiles: [legacy, all]
+    ports: ["8105:80"]
+  phpmyadmin-4_9:
+    image: phpmyadmin/phpmyadmin:4.9
+    profiles: [legacy, all]
+    ports: ["8106:80"]
+    environment: {PMA_ARBITRARY: "1"}
+  roundcube-1_4:
+    image: roundcube/roundcubemail:1.4.13-apache
+    profiles: [legacy, all]
+    ports: ["8107:80"]
+  grafana-7_5:                   # active-probe
+    image: grafana/grafana:7.5.17
+    profiles: [legacy, all]
+    ports: ["8108:3000"]
+  # ---- legacy batch 2 (even older / more apps) ----
+  wordpress-4_7:
+    image: wordpress:4.7-apache
+    profiles: [legacy, all]
+    ports: ["8110:80"]
+  nextcloud-18:
+    image: nextcloud:18-apache
+    profiles: [legacy, all]
+    ports: ["8111:80"]
+  mediawiki-1_31:
+    image: mediawiki:1.31
+    profiles: [legacy, all]
+    ports: ["8112:80"]
+  drupal-9_2:
+    image: drupal:9.2.21-apache
+    profiles: [legacy, all]
+    ports: ["8113:80"]
+  roundcube-1_3:
+    image: roundcube/roundcubemail:1.3.17-apache
+    profiles: [legacy, all]
+    ports: ["8114:80"]
+  grafana-6_7:                   # active-probe
+    image: grafana/grafana:6.7.6
+    profiles: [legacy, all]
+    ports: ["8115:3000"]
+  phpmyadmin-4_7:
+    image: phpmyadmin/phpmyadmin:4.7
+    profiles: [legacy, all]
+    ports: ["8117:80"]
+    environment: {PMA_ARBITRARY: "1"}
+  redmine-4_0:                   # sqlite by default (no DB sidecar needed)
+    image: redmine:4.0
+    profiles: [legacy, all]
+    ports: ["8118:3000"]
+  joomla-3_10:                   # needs a DB to boot; serves /media/ once the installer is up
+    image: joomla:3.10-apache
+    profiles: [legacy, all]
+    ports: ["8119:80"]
+    environment: {JOOMLA_DB_HOST: joomla-3_10-db, JOOMLA_DB_PASSWORD: pw}
+    depends_on: [joomla-3_10-db]
+  joomla-3_10-db:
+    image: mariadb:11
+    profiles: [legacy, all]
+    environment: {MARIADB_ROOT_PASSWORD: pw, MARIADB_DATABASE: joomla}
+
+  # ---- legacy batch 3 (even older + an OLD internal tool, where the CVEs concentrate) ----
+  nextcloud-15:
+    image: nextcloud:15-apache
+    profiles: [legacy, all]
+    ports: ["8121:80"]
+  mediawiki-1_27:
+    image: mediawiki:1.27
+    profiles: [legacy, all]
+    ports: ["8122:80"]
+  grafana-5_4:                   # active-probe
+    image: grafana/grafana:5.4.5
+    profiles: [legacy, all]
+    ports: ["8123:3000"]
+  phpmyadmin-4_6:
+    image: phpmyadmin/phpmyadmin:4.6
+    profiles: [legacy, all]
+    ports: ["8124:80"]
+    environment: {PMA_ARBITRARY: "1"}
+
+  # ---- legacy batch 4 ----
+  drupal-8_9:                    # Drupal 8 (older /core/ layout); no DB needed to serve /core/
+    image: drupal:8.9.20-apache
+    profiles: [legacy, all]
+    ports: ["8128:80"]
+  owncloud-10:                   # OLD ownCloud 10 (lots of CVEs); serves /core/ like Nextcloud
+    image: owncloud/server:10.11.0
+    profiles: [legacy, all]
+    ports: ["8129:8080"]
+    environment:
+      OWNCLOUD_DOMAIN: localhost:8129
+      OWNCLOUD_TRUSTED_DOMAINS: localhost
+      OWNCLOUD_DB_TYPE: mysql
+      OWNCLOUD_DB_NAME: owncloud
+      OWNCLOUD_DB_USERNAME: owncloud
+      OWNCLOUD_DB_PASSWORD: pw
+      OWNCLOUD_DB_HOST: owncloud-10-db
+      OWNCLOUD_ADMIN_USERNAME: admin
+      OWNCLOUD_ADMIN_PASSWORD: pw
+      OWNCLOUD_REDIS_HOST: owncloud-10-redis
+    depends_on: [owncloud-10-db, owncloud-10-redis]
+  owncloud-10-db:
+    image: mariadb:10.6
+    profiles: [legacy, all]
+    command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
+    environment: {MARIADB_DATABASE: owncloud, MARIADB_USER: owncloud, MARIADB_PASSWORD: pw, MARIADB_ROOT_PASSWORD: pw}
+  owncloud-10-redis:
+    image: redis:6-alpine
+    profiles: [legacy, all]
+  prestashop-1_6:                # OLD PrestaShop 1.6; serves /themes/, /js/ static
+    image: prestashop/prestashop:1.6
+    profiles: [legacy, all]
+    ports: ["8130:80"]
+    environment: {DB_SERVER: prestashop-1_6-db, DB_NAME: prestashop, DB_USER: root, DB_PASSWD: pw, PS_INSTALL_AUTO: "0"}
+    depends_on: [prestashop-1_6-db]
+  prestashop-1_6-db:
+    image: mariadb:10.6
+    profiles: [legacy, all]
+    environment: {MARIADB_ROOT_PASSWORD: pw, MARIADB_DATABASE: prestashop}
+
+  # ---- legacy batch 5 (very old releases) ----
+  nextcloud-13:
+    image: nextcloud:13.0.12-apache
+    profiles: [legacy, all]
+    ports: ["8131:80"]
+  nextcloud-14:
+    image: nextcloud:14.0.14-apache
+    profiles: [legacy, all]
+    ports: ["8132:80"]
+  joomla-3_6:
+    image: joomla:3.6-apache
+    profiles: [legacy, all]
+    ports: ["8133:80"]
+    environment: {JOOMLA_DB_HOST: joomla-3_6-db, JOOMLA_DB_PASSWORD: pw}
+    depends_on: [joomla-3_6-db]
+  joomla-3_6-db:
+    image: mariadb:10.6
+    profiles: [legacy, all]
+    environment: {MARIADB_ROOT_PASSWORD: pw, MARIADB_DATABASE: joomla}
+  redmine-3_4:                   # sqlite by default (slow first-boot migrations)
+    image: redmine:3.4.6
+    profiles: [legacy, all]
+    ports: ["8134:3000"]
+
+  # ---- apps: more indexed platforms that have a ready Docker image ----
+  kanboard:                      # sqlite by default — no DB sidecar
+    image: kanboard/kanboard:v1.2.41
+    profiles: [apps, all]
+    ports: ["8030:80"]
+  dokuwiki:                      # file-based wiki (no SQL); serves /lib/ verbatim
+    image: linuxserver/dokuwiki:version-2024-02-06b
+    profiles: [apps, all]
+    ports: ["8031:80"]
+    environment: {PUID: "1000", PGID: "1000", TZ: "UTC"}
+  espocrm:                       # serves /client/ source but with CRLF newlines (needs CRLF-tolerant match)
+    image: espocrm/espocrm:8.4.0
+    profiles: [apps, all]
+    ports: ["8032:80"]
+    environment:
+      ESPOCRM_DATABASE_HOST: espocrm-db
+      ESPOCRM_DATABASE_USER: espocrm
+      ESPOCRM_DATABASE_PASSWORD: pw
+      ESPOCRM_ADMIN_USERNAME: admin
+      ESPOCRM_ADMIN_PASSWORD: password
+      ESPOCRM_SITE_URL: http://localhost:8032
+    depends_on: [espocrm-db]
+  espocrm-db:
+    image: mariadb:10.6
+    profiles: [apps, all]
+    environment: {MARIADB_DATABASE: espocrm, MARIADB_USER: espocrm, MARIADB_PASSWORD: pw, MARIADB_ROOT_PASSWORD: pw}
+  openemr:                       # auto-installs; serves /interface/ static
+    image: openemr/openemr:7.0.2
+    profiles: [apps, all]
+    ports: ["8033:80"]
+    environment: {MYSQL_HOST: openemr-db, MYSQL_ROOT_PASS: pw, MYSQL_USER: openemr, MYSQL_PASS: pw, OE_USER: admin, OE_PASS: password123}
+    depends_on: [openemr-db]
+  openemr-db:
+    image: mariadb:10.6
+    profiles: [apps, all]
+    environment: {MARIADB_ROOT_PASSWORD: pw}
+  postfixadmin:                  # PHP; docroot=public/, serves /css /js /images verbatim (no DB needed to serve statics)
+    image: postfixadmin:4.0.3-apache
+    platform: linux/amd64        # no arm64 manifest — runs under emulation
+    profiles: [apps, all]
+    ports: ["8035:80"]
+  phplist:                       # PHP; app under /lists/, serves /lists/{styles,js,ui} verbatim
+    image: phplist/phplist:3.6.16
+    platform: linux/amd64        # no arm64 manifest — runs under emulation
+    profiles: [apps, all]
+    ports: ["8034:80"]
+    environment: {DB_HOST: phplist-db, DB_NAME: phplist, DB_USER: phplist, DB_PASSWORD: pw}
+    depends_on: [phplist-db]
+  phplist-db:
+    image: mariadb:10.6
+    profiles: [apps, all]
+    environment: {MARIADB_DATABASE: phplist, MARIADB_USER: phplist, MARIADB_PASSWORD: pw, MARIADB_ROOT_PASSWORD: pw}
